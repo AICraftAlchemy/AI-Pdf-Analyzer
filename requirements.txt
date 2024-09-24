@@ -1,0 +1,10 @@
+streamlit
+PyPDF2
+langchain
+langchain-google-genai
+google-generativeai
+faiss-cpu  # or faiss-gpu if using GPU
+google-api-python-client
+requests
+python-dotenv
+googlesearch-python  # or googlesearch if you used a different package for searching
