@@ -102,10 +102,23 @@ def get_youtube_links(question):
 def main():
     st.set_page_config(page_title="Chat PDF", layout="wide")
 
+    # Hide other elements
+    hide_streamlit_style = """
+                <style>
+                #MainMenu {visibility: hidden;}
+                footer {visibility: visible;}
+                header {visibility: hidden;}
+                .stTextInput>div>div>textarea {min-height: 100px;}
+                .stButton>button {background-color: #007BFF;}
+                .stButton>button:hover {background-color: #0056b3;}
+                .reportview-container .main .block-container{max-width: 100%;}
+                </style>
+                """
+    st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
     # Dark/Light Mode Toggle
-    st.sidebar.markdown("## :bulb: Toggle Dark/Light Mode")
-    theme = st.sidebar.radio("Choose your theme", ["Light Mode", "Dark Mode"])
-    
+    theme = st.radio("Choose your theme", ["Light Mode", "Dark Mode"])
+
     if theme == "Dark Mode":
         st.markdown(
             """
@@ -138,18 +151,16 @@ def main():
         "This AI PDF ANALYZER provides answers **exclusively from the uploaded PDF files** and external sources (Google and YouTube) for better insights."
     )
 
-    # Sidebar for uploading PDF files
-    with st.sidebar:
-        st.title("Menu:")
-        pdf_docs = st.file_uploader("Upload your PDF Files and Click on the Submit & Process Button",
-                                     accept_multiple_files=True)
-        if st.button("Submit & Process"):
-            with st.spinner("Processing..."):
-                raw_text = get_pdf_text(pdf_docs)
-                text_chunks = get_text_chunks(raw_text)
-                # Temporarily store the FAISS index in memory
-                st.session_state.vector_store = get_vector_store(text_chunks)
-                st.success("Done")
+    # Upload PDF files
+    pdf_docs = st.file_uploader("Upload your PDF Files and Click on the Submit & Process Button",
+                                 accept_multiple_files=True)
+    if st.button("Submit & Process"):
+        with st.spinner("Processing..."):
+            raw_text = get_pdf_text(pdf_docs)
+            text_chunks = get_text_chunks(raw_text)
+            # Temporarily store the FAISS index in memory
+            st.session_state.vector_store = get_vector_store(text_chunks)
+            st.success("Done")
 
     user_question = st.text_input("Ask a Question from the PDF Files", key="user_input")
 
