@@ -164,34 +164,41 @@ def main():
 
     user_question = st.text_input("Ask a Question from the PDF Files", key="user_input")
 
-    if "questions_answers" not in st.session_state:
-        st.session_state.questions_answers = []
-
-    if user_question and "vector_store" in st.session_state:
-        answer = user_input(user_question, st.session_state.vector_store, st.session_state.questions_answers)
-        google_links = get_google_links(user_question)
-        youtube_links = get_youtube_links(user_question)
-        st.write("Reply: ", answer)
-        st.write("Google Links:")
-        for link in google_links:
-            st.write(link)
-        st.write("YouTube Links:")
-        for link in youtube_links:
-            st.write(link)
-        if len(st.session_state.questions_answers) >= 2:
-            st.markdown("## Previous Questions and Answers")
-            for question, answer in reversed(st.session_state.questions_answers[:-1]):
-                st.write("**Question:**", question)
-                st.write("**Answer:**", answer)
-                st.write("**Google Links:**")
-                links = get_google_links(question)
-                for link in links:
+    if st.button("Submit Question"):
+        if "questions_answers" not in st.session_state:
+            st.session_state.questions_answers = []
+        if user_question and "vector_store" in st.session_state:
+            st.write("Generating answer...")
+            with st.spinner("Processing..."):
+                time.sleep(1)
+                st.write("Thinking...")
+                time.sleep(1)
+                st.write("Almost there...")
+                time.sleep(1)
+                answer = user_input(user_question, st.session_state.vector_store, st.session_state.questions_answers)
+                google_links = get_google_links(user_question)
+                youtube_links = get_youtube_links(user_question)
+                st.write("Reply: ", answer)
+                st.write("Google Links:")
+                for link in google_links:
                     st.write(link)
-                st.write("**YouTube Links:**")
-                links = get_youtube_links(question)
-                for link in links:
+                st.write("YouTube Links:")
+                for link in youtube_links:
                     st.write(link)
-                st.write("---")
+                if len(st.session_state.questions_answers) >= 2:
+                    st.markdown("## Previous Questions and Answers")
+                    for question, answer in reversed(st.session_state.questions_answers[:-1]):
+                        st.write("**Question:**", question)
+                        st.write("**Answer:**", answer)
+                        st.write("**Google Links:**")
+                        links = get_google_links(question)
+                        for link in links:
+                            st.write(link)
+                        st.write("**YouTube Links:**")
+                        links = get_youtube_links(question)
+                        for link in links:
+                            st.write(link)
+                        st.write("---")
 
     st.markdown(
         """
